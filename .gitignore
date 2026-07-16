@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.docx
+*.dotx
+*.docm
+*.dotm
+*.pdf
+*.png
+*.jpg
+*.jpeg
+thesis_format_manifest.json

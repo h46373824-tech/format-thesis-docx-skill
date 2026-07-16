@@ -1,0 +1,5 @@
+interface:
+  display_name: "论文 Word 格式助手"
+  short_description: "识别论文模板并自动规范封面、正文、标题层级与目录"
+  default_prompt: "使用 $format-thesis-docx 根据我上传的论文模板整理 Word 论文格式并生成目录。"
+
