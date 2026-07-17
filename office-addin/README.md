@@ -7,7 +7,7 @@ This directory contains a sideloadable Microsoft Office Add-in task pane for Wor
 - Export the active Word document as a temporary DOCX copy.
 - Inspect paragraph count, heading-style candidates, selection text, and export size.
 - Collect university templates, approved samples, PDF/image rules, and cover metadata.
-- Send the manuscript and formatting evidence to a configurable HTTPS backend.
+- Send the manuscript and formatting evidence to an internally configured HTTPS backend.
 - Render consequential confirmation questions returned by the skill adapter.
 - Download the formatted result as a new DOCX without overwriting the active document.
 
@@ -56,7 +56,9 @@ Then configure a trusted network-share catalog or use your organization's Office
 
 ## Backend configuration
 
-The task pane defaults to `https://localhost:8787`. Change the address in the task pane and optionally enter a bearer token. The backend address is stored locally; the bearer token remains only in the current task-pane memory and is never written to local storage.
+The service address is intentionally hidden from the task-pane UI. Development builds use the `SERVICE_CONFIG.baseUrl` value near the top of `src/taskpane.js`, which defaults to `https://localhost:8787`.
+
+Do not embed production bearer tokens or other secrets in task-pane JavaScript. For production, place authentication and the real backend address behind a same-origin server-side proxy, then point `SERVICE_CONFIG.baseUrl` at that proxy origin.
 
 ## Production deployment
 

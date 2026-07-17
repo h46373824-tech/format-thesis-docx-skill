@@ -1,6 +1,9 @@
 /* global Office, Word */
 
 const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+const SERVICE_CONFIG = Object.freeze({
+  baseUrl: "https://localhost:8787",
+});
 
 const state = {
   analysisId: null,
@@ -18,16 +21,12 @@ Office.onReady((info) => {
 
   bindElements();
   bindEvents();
-  restoreBackendUrl();
   document.getElementById("app").hidden = false;
   setStatus("ready", "准备就绪", "任务窗格已连接到当前 Word 文档。");
 });
 
 function bindElements() {
   const ids = [
-    "backend-url",
-    "api-token",
-    "test-connection",
     "authority-files",
     "file-list",
     "cover-title",
@@ -57,26 +56,10 @@ function bindElements() {
 }
 
 function bindEvents() {
-  elements["backend-url"].addEventListener("change", saveBackendUrl);
   elements["authority-files"].addEventListener("change", renderSelectedFiles);
-  elements["test-connection"].addEventListener("click", testConnection);
   elements["preview-document"].addEventListener("click", previewDocument);
   elements["analyze-document"].addEventListener("click", analyzeDocument);
   elements["format-document"].addEventListener("click", formatDocument);
-}
-
-function restoreBackendUrl() {
-  const saved = localStorage.getItem("format-thesis-backend-url");
-  if (saved) {
-    elements["backend-url"].value = saved;
-  }
-}
-
-function saveBackendUrl() {
-  const value = elements["backend-url"].value.trim();
-  if (value) {
-    localStorage.setItem("format-thesis-backend-url", value);
-  }
 }
 
 function renderSelectedFiles() {
@@ -92,22 +75,6 @@ function renderSelectedFiles() {
     row.append(name, size);
     elements["file-list"].append(row);
   }
-}
-
-async function testConnection() {
-  await runAction(async () => {
-    setStatus("busy", "正在测试连接", "检查格式化服务的健康状态……");
-    const response = await backendFetch("/health", { method: "GET" });
-    if (!response.ok) {
-      throw new Error(`服务返回 HTTP ${response.status}`);
-    }
-    const details = await readJsonSafely(response);
-    setStatus(
-      "success",
-      "连接成功",
-      details?.service ? `已连接：${details.service}` : "格式化服务可以访问。",
-    );
-  });
 }
 
 async function previewDocument() {
@@ -352,9 +319,9 @@ function ensureAuthorityProvided() {
 }
 
 function backendBaseUrl() {
-  const raw = elements["backend-url"].value.trim().replace(/\/+$/, "");
+  const raw = SERVICE_CONFIG.baseUrl.trim().replace(/\/+$/, "");
   if (!raw) {
-    throw new Error("请填写格式化服务地址。");
+    throw new Error("格式化服务尚未配置，请联系管理员。");
   }
   const url = new URL(raw);
   if (url.protocol !== "https:") {
@@ -364,12 +331,7 @@ function backendBaseUrl() {
 }
 
 function requestHeaders() {
-  const headers = {};
-  const token = elements["api-token"].value.trim();
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-  return headers;
+  return {};
 }
 
 function backendFetch(path, options) {

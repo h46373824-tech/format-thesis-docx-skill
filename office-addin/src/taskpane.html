@@ -28,25 +28,6 @@
         <div class="section-heading">
           <div>
             <span class="step">01</span>
-            <h2>连接格式化服务</h2>
-          </div>
-          <button id="test-connection" class="button button-quiet" type="button">测试连接</button>
-        </div>
-        <label class="field">
-          <span>后端地址</span>
-          <input id="backend-url" type="url" value="https://localhost:8787" spellcheck="false" />
-          <small>必须是 HTTPS；仅地址会保存在本机，令牌不会持久化。</small>
-        </label>
-        <label class="field">
-          <span>API 令牌（可选）</span>
-          <input id="api-token" type="password" autocomplete="off" placeholder="仅在当前任务窗格内存中使用" />
-        </label>
-      </section>
-
-      <section class="card">
-        <div class="section-heading">
-          <div>
-            <span class="step">02</span>
             <h2>模板与封面资料</h2>
           </div>
         </div>
@@ -81,7 +62,7 @@
       <section class="card">
         <div class="section-heading">
           <div>
-            <span class="step">03</span>
+            <span class="step">02</span>
             <h2>分析与处理</h2>
           </div>
         </div>
@@ -96,7 +77,7 @@
       <section id="confirmation-section" class="card" hidden>
         <div class="section-heading">
           <div>
-            <span class="step">04</span>
+            <span class="step">03</span>
             <h2>需要你的确认</h2>
           </div>
         </div>
@@ -108,7 +89,7 @@
         <span id="status-indicator" class="status-dot"></span>
         <div>
           <strong id="status-title">准备就绪</strong>
-          <p id="status-message">先预检当前 Word 文档，或连接格式化服务。</p>
+          <p id="status-message">先预检当前 Word 文档，或直接上传格式依据开始处理。</p>
         </div>
       </section>
     </main>
