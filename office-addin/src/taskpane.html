@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>论文 Word 格式助手</title>
+    <link rel="stylesheet" href="./taskpane.css" />
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <script src="./taskpane.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand-mark" aria-hidden="true">W</div>
+      <div>
+        <p class="eyebrow">FORMAT THESIS DOCX</p>
+        <h1>论文格式助手</h1>
+      </div>
+    </header>
+
+    <main id="app" class="app-shell" hidden>
+      <section class="notice" aria-label="安全说明">
+        <strong>始终生成新文件</strong>
+        <span>不会覆盖当前论文；正文、引用、公式与图片默认保持不变。</span>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <span class="step">01</span>
+            <h2>连接格式化服务</h2>
+          </div>
+          <button id="test-connection" class="button button-quiet" type="button">测试连接</button>
+        </div>
+        <label class="field">
+          <span>后端地址</span>
+          <input id="backend-url" type="url" value="https://localhost:8787" spellcheck="false" />
+          <small>必须是 HTTPS；仅地址会保存在本机，令牌不会持久化。</small>
+        </label>
+        <label class="field">
+          <span>API 令牌（可选）</span>
+          <input id="api-token" type="password" autocomplete="off" placeholder="仅在当前任务窗格内存中使用" />
+        </label>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <span class="step">02</span>
+            <h2>模板与封面资料</h2>
+          </div>
+        </div>
+        <label class="file-drop" for="authority-files">
+          <strong>选择模板、范文或格式说明</strong>
+          <span>支持 DOCX、DOTX、PDF、PNG、JPG，可多选</span>
+          <input id="authority-files" type="file" multiple accept=".docx,.dotx,.pdf,.png,.jpg,.jpeg" />
+        </label>
+        <div id="file-list" class="file-list" aria-live="polite"></div>
+
+        <details class="metadata-panel">
+          <summary>填写封面信息</summary>
+          <div class="field-grid">
+            <label class="field"><span>论文题目</span><input id="cover-title" type="text" /></label>
+            <label class="field"><span>作者</span><input id="cover-author" type="text" /></label>
+            <label class="field"><span>学号</span><input id="cover-student-id" type="text" /></label>
+            <label class="field"><span>学院</span><input id="cover-school" type="text" /></label>
+            <label class="field"><span>专业</span><input id="cover-major" type="text" /></label>
+            <label class="field"><span>导师</span><input id="cover-supervisor" type="text" /></label>
+            <label class="field"><span>学位</span><input id="cover-degree" type="text" /></label>
+            <label class="field"><span>日期</span><input id="cover-date" type="text" placeholder="例如：2026 年 7 月" /></label>
+          </div>
+        </details>
+
+        <div class="option-list">
+          <label><input id="add-toc" type="checkbox" checked /> 添加或修复动态目录</label>
+          <label><input type="checkbox" checked disabled /> 保留论文内容与嵌入对象</label>
+          <label><input type="checkbox" checked disabled /> 输出新 DOCX，不覆盖原稿</label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <span class="step">03</span>
+            <h2>分析与处理</h2>
+          </div>
+        </div>
+        <div class="action-grid">
+          <button id="preview-document" class="button button-secondary" type="button">预检当前文档</button>
+          <button id="analyze-document" class="button button-secondary" type="button">分析格式要求</button>
+          <button id="format-document" class="button button-primary" type="button">处理并下载新文件</button>
+        </div>
+        <div id="document-summary" class="summary" hidden></div>
+      </section>
+
+      <section id="confirmation-section" class="card" hidden>
+        <div class="section-heading">
+          <div>
+            <span class="step">04</span>
+            <h2>需要你的确认</h2>
+          </div>
+        </div>
+        <p class="section-copy">仅显示会影响合规性、分页、封面字段或文档结构的问题。</p>
+        <div id="confirmation-list" class="confirmation-list"></div>
+      </section>
+
+      <section class="status-panel" aria-live="polite" aria-atomic="true">
+        <span id="status-indicator" class="status-dot"></span>
+        <div>
+          <strong id="status-title">准备就绪</strong>
+          <p id="status-message">先预检当前 Word 文档，或连接格式化服务。</p>
+        </div>
+      </section>
+    </main>
+
+    <section id="unsupported" class="unsupported" hidden>
+      <h1>请在 Microsoft Word 中打开</h1>
+      <p>此任务窗格需要 Word 和 Office JavaScript API。</p>
+    </section>
+  </body>
+</html>

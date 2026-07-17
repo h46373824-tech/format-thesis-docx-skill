@@ -1,0 +1,23 @@
+{
+  "name": "format-thesis-docx-word-addin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Microsoft Word task pane for the format-thesis-docx Codex skill workflow.",
+  "type": "module",
+  "scripts": {
+    "certs": "office-addin-dev-certs install",
+    "dev-server": "node scripts/serve.mjs",
+    "start": "office-addin-debugging start manifest.xml",
+    "stop": "office-addin-debugging stop manifest.xml",
+    "validate": "office-addin-manifest validate manifest.xml",
+    "check": "node --check src/taskpane.js && node --check scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "office-addin-debugging": "6.1.2",
+    "office-addin-dev-certs": "2.0.10",
+    "office-addin-manifest": "2.1.6"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

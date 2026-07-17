@@ -11,11 +11,12 @@ A Codex skill for analyzing university thesis templates and formatting Word manu
 | Normalize headings, page geometry, page numbering, cover content, and table of contents | Available |
 | Pause for confirmation when formatting evidence is ambiguous or conflicting | Available |
 | Install as a Codex skill | Available |
-| Install directly as a Microsoft Word ribbon add-in | Not included |
+| Sideload a Microsoft Word task pane add-in | Available in `office-addin/` |
+| Format without an HTTPS skill-adapter backend | Not included |
 
-This repository contains a Codex skill, not a standalone DOCX converter and not an Office Add-in. Actual document editing and render verification are performed through Codex's `documents` capability.
+This repository contains both the Codex skill and a sideloadable Microsoft Word task pane. Actual document editing and render verification are performed through Codex's `documents` capability.
 
-The skill includes a Word Add-in handoff contract so it can serve as the document-processing workflow behind a separately developed Microsoft Office Add-in. A Word ribbon button, task pane, Office manifest, and hosted add-in service are not included in this repository.
+The task pane exports the active DOCX, collects formatting evidence and confirmations, calls a configurable HTTPS backend, and downloads the result as a new file. The hosted formatting backend is deployment-specific and is not included. See [`office-addin/README.md`](office-addin/README.md) and [`office-addin/API_CONTRACT.md`](office-addin/API_CONTRACT.md).
 
 ## Install
 
@@ -62,9 +63,15 @@ format-thesis-docx/
   references/confirmation-policy.md
   references/format-manifest.md
   scripts/docx_profile.py
+office-addin/
+  manifest.xml
+  src/taskpane.html
+  src/taskpane.css
+  src/taskpane.js
+  scripts/serve.mjs
+  API_CONTRACT.md
 ```
 
 ## Validation
 
 The skill has passed the Codex skill structure validator. The bundled DOCX profiler has also passed a smoke test covering Chinese heading detection, cover candidates, section margins, header extraction, and TOC-field detection.
-
