@@ -1,0 +1,111 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "validate-${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  skill-and-python:
+    name: Skill metadata and Python
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate skill metadata
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          skill_path = Path("format-thesis-docx/SKILL.md")
+          text = skill_path.read_text(encoding="utf-8")
+          match = re.match(r"\A---\n(?P<frontmatter>.*?)\n---(?:\n|\Z)", text, re.DOTALL)
+          if not match:
+              raise SystemExit("SKILL.md must start with YAML front matter")
+
+          metadata = {}
+          for raw_line in match.group("frontmatter").splitlines():
+              if not raw_line.strip() or raw_line.lstrip().startswith("#"):
+                  continue
+              key, separator, value = raw_line.partition(":")
+              if not separator:
+                  raise SystemExit(f"Invalid front-matter line: {raw_line!r}")
+              metadata[key.strip()] = value.strip().strip('"').strip("'")
+
+          if metadata.get("name") != "format-thesis-docx":
+              raise SystemExit("Skill name must be 'format-thesis-docx'")
+          description = metadata.get("description", "")
+          if len(description) < 80:
+              raise SystemExit("Skill description is missing or too short")
+          if set(metadata) != {"name", "description"}:
+              raise SystemExit(f"Unexpected skill metadata keys: {sorted(metadata)}")
+
+          agent_path = Path("format-thesis-docx/agents/openai.yaml")
+          agent_text = agent_path.read_text(encoding="utf-8")
+          required_agent_keys = ("interface:", "display_name:", "short_description:", "default_prompt:")
+          missing = [key for key in required_agent_keys if key not in agent_text]
+          if missing:
+              raise SystemExit(f"Missing agent metadata keys: {missing}")
+          if "$format-thesis-docx" not in agent_text:
+              raise SystemExit("Agent default_prompt must invoke $format-thesis-docx")
+
+          required_files = (
+              "format-thesis-docx/references/confirmation-policy.md",
+              "format-thesis-docx/references/format-manifest.md",
+              "format-thesis-docx/scripts/docx_profile.py",
+          )
+          absent = [path for path in required_files if not Path(path).is_file()]
+          if absent:
+              raise SystemExit(f"Missing required skill files: {absent}")
+
+          print("Skill metadata and required files are valid.")
+          PY
+
+      - name: Check Python script syntax
+        run: python -m compileall -q format-thesis-docx/scripts
+
+      - name: Check profiler command-line entry point
+        run: python format-thesis-docx/scripts/docx_profile.py --help
+
+  office-addin:
+    name: Office Add-in
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: office-addin
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: office-addin/package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Check JavaScript syntax
+        run: npm run check
+
+      - name: Validate Office manifest
+        run: npm run validate

@@ -7,6 +7,7 @@ __pycache__/
 *.pdf
 *.png
 !office-addin/src/assets/*.png
+!assets/*.png
 *.jpg
 *.jpeg
 thesis_format_manifest.json

@@ -1,0 +1,33 @@
+name: "Private security contact request / 私密安全联络请求"
+description: "Request a private reporting channel without disclosing vulnerability details / 仅请求私密联络渠道，不披露漏洞细节"
+title: "[Security contact] "
+labels:
+  - security
+  - triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form only when GitHub's private vulnerability-reporting link is unavailable. Do not include exploit steps, manuscript data, credentials, private URLs, or any other sensitive detail. A maintainer will reply with the next safe contact step.
+
+        仅在 GitHub 私密漏洞报告入口不可用时使用本表单。请勿填写漏洞细节、论文内容、凭证、私有地址或其他敏感信息；维护者会回复下一步安全联络方式。
+  - type: dropdown
+    id: component
+    attributes:
+      label: "Affected area at a high level / 大致受影响范围"
+      options:
+        - "Codex skill workflow / Skill 工作流"
+        - "DOCX profiler / DOCX 分析脚本"
+        - "Word task pane / Word 任务窗格"
+        - "Office manifest or dependencies / Office 清单或依赖"
+        - "Public documentation or configuration / 公共文档或配置"
+        - "Other / 其他"
+    validations:
+      required: true
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: "Safe disclosure confirmation / 安全披露确认"
+      options:
+        - label: "I omitted all vulnerability details and sensitive data from this public request. / 我未在这个公开请求中填写任何漏洞细节或敏感数据。"
+          required: true

@@ -1,0 +1,98 @@
+name: "Bug report / 缺陷报告"
+description: "Report a reproducible problem without exposing thesis data / 报告可复现问题，请勿泄露论文数据"
+title: "[Bug] "
+labels:
+  - bug
+  - triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Please use synthetic or fully anonymized material.
+
+        感谢反馈。请使用合成或彻底匿名化的材料，不要上传真实论文、学号、令牌、私有地址或未授权模板。Security issues must follow `SECURITY.md` instead of this form.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: "Preflight / 提交前确认"
+      options:
+        - label: "I searched existing issues for the same problem. / 我已搜索现有 Issue。"
+          required: true
+        - label: "I removed personal, confidential, copyrighted, and credential data. / 我已移除个人、机密、版权和凭证数据。"
+          required: true
+        - label: "This is not a private security report. / 这不是需要私下报告的安全漏洞。"
+          required: true
+  - type: dropdown
+    id: component
+    attributes:
+      label: "Affected component / 受影响组件"
+      options:
+        - "Codex skill workflow / Skill 工作流"
+        - "DOCX profiler / DOCX 分析脚本"
+        - "Word task pane / Word 任务窗格"
+        - "Office manifest or sideloading / Office 清单或旁加载"
+        - "API contract or deployment docs / 接口契约或部署文档"
+        - "Other / 其他"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: "Version or commit / 版本或提交"
+      placeholder: "v1.0.0 or commit SHA"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: "Environment / 环境"
+      description: "Include relevant OS, Codex, Python, Node.js, Word, and browser versions."
+      placeholder: |
+        OS:
+        Codex:
+        Python:
+        Node.js:
+        Word/browser:
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: "Steps to reproduce / 复现步骤"
+      description: "Provide the smallest safe, repeatable sequence."
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected behavior / 预期行为"
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Actual behavior / 实际行为"
+      description: "Paste sanitized errors or screenshots if useful."
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: "Safe reproduction material / 安全复现材料"
+      description: "Optional link or description for synthetic/anonymized input. Do not attach a real thesis."
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Additional context / 补充信息"
+      description: "Include recent changes, workarounds, or suspected cause."
+  - type: checkboxes
+    id: backend
+    attributes:
+      label: "Backend boundary / 后端边界"
+      options:
+        - label: "I understand this repository does not include a hosted formatting backend. / 我了解本仓库不包含托管格式化后端。"
+          required: true

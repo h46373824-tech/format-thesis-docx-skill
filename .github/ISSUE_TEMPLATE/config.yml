@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Security vulnerability / 安全漏洞"
+    url: "https://github.com/h46373824-tech/format-thesis-docx-skill/security/advisories/new"
+    about: "Report vulnerabilities privately; do not disclose thesis data in a public issue. / 请私下报告漏洞。"
+  - name: "Documentation / 使用文档"
+    url: "https://github.com/h46373824-tech/format-thesis-docx-skill#readme"
+    about: "Review capabilities, installation, and project boundaries before filing an issue. / 提交前请先阅读能力与安装说明。"

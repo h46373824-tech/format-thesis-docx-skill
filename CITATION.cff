@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If this software supports your work, please cite it using the metadata below. 如果本项目对你的工作有帮助，请按以下信息引用。"
+type: software
+title: "Format Thesis DOCX Skill"
+abstract: >-
+  A Codex skill and Microsoft Word task-pane client for analyzing thesis
+  formatting evidence, applying safe document-formatting workflows, resolving
+  consequential ambiguities, and producing a separately saved DOCX with a
+  dynamic table of contents. The repository does not include a hosted
+  formatting backend.
+authors:
+  - family-names: "h46373824-tech"
+version: 1.0.0
+date-released: 2026-07-18
+repository-code: "https://github.com/h46373824-tech/format-thesis-docx-skill"
+url: "https://github.com/h46373824-tech/format-thesis-docx-skill"
+license: MIT
+keywords:
+  - thesis
+  - dissertation
+  - docx
+  - Microsoft Word
+  - Office Add-in
+  - Codex skill
+  - document formatting
+  - table of contents

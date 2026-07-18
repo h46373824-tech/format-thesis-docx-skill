@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Format Thesis DOCX</title>
+  <desc id="desc">AI-assisted thesis formatting workflow for Microsoft Word</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071a3d"/>
+      <stop offset="0.55" stop-color="#123d77"/>
+      <stop offset="1" stop-color="#0b6b83"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eaf5ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#00102d" flood-opacity="0.38"/>
+    </filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#8fd7ff" stroke-opacity="0.07"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="640" rx="32" fill="url(#bg)"/>
+  <rect width="1280" height="640" rx="32" fill="url(#grid)"/>
+  <circle cx="1130" cy="90" r="210" fill="#55d7d0" opacity="0.08"/>
+  <circle cx="1040" cy="590" r="270" fill="#57a9ff" opacity="0.09"/>
+
+  <g transform="translate(78 78)">
+    <rect width="82" height="82" rx="20" fill="#ffffff" opacity="0.14"/>
+    <rect x="18" y="14" width="46" height="54" rx="5" fill="#ffffff"/>
+    <path d="M50 14v14h14" fill="#b8e6ff"/>
+    <path d="M27 38h28M27 47h28M27 56h20" stroke="#185abd" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <text x="78" y="230" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700" letter-spacing="-1">Format Thesis DOCX</text>
+  <text x="80" y="286" fill="#c8ecff" font-family="Segoe UI, Arial, sans-serif" font-size="28">AI-assisted thesis formatting for Microsoft Word</text>
+  <text x="80" y="326" fill="#a9d8ef" font-family="Microsoft YaHei, Segoe UI, sans-serif" font-size="23">识别学校模板 · 统一论文格式 · 生成动态目录 · 关键歧义先确认</text>
+
+  <g transform="translate(80 386)" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600">
+    <g><rect width="136" height="46" rx="23" fill="#ffffff" opacity="0.13"/><text x="68" y="30" text-anchor="middle" fill="#ffffff">Styles</text></g>
+    <g transform="translate(150 0)"><rect width="136" height="46" rx="23" fill="#ffffff" opacity="0.13"/><text x="68" y="30" text-anchor="middle" fill="#ffffff">Sections</text></g>
+    <g transform="translate(300 0)"><rect width="170" height="46" rx="23" fill="#ffffff" opacity="0.13"/><text x="85" y="30" text-anchor="middle" fill="#ffffff">Page numbers</text></g>
+    <g transform="translate(484 0)"><rect width="110" height="46" rx="23" fill="#ffffff" opacity="0.13"/><text x="55" y="30" text-anchor="middle" fill="#ffffff">TOC</text></g>
+  </g>
+
+  <g transform="translate(805 84)" filter="url(#shadow)">
+    <rect x="0" y="18" width="330" height="446" rx="18" fill="url(#paper)"/>
+    <path d="M255 18h57a18 18 0 0 1 18 18v58z" fill="#c9e8ff"/>
+    <path d="M255 18v76h75" fill="none" stroke="#a5d2f2" stroke-width="2"/>
+    <rect x="50" y="72" width="178" height="18" rx="9" fill="#185abd"/>
+    <rect x="72" y="112" width="134" height="10" rx="5" fill="#86bde3"/>
+    <rect x="48" y="158" width="234" height="8" rx="4" fill="#b7d5e8"/>
+    <rect x="48" y="180" width="218" height="8" rx="4" fill="#b7d5e8"/>
+    <rect x="48" y="202" width="226" height="8" rx="4" fill="#b7d5e8"/>
+    <rect x="48" y="250" width="106" height="13" rx="6" fill="#185abd"/>
+    <rect x="48" y="282" width="234" height="8" rx="4" fill="#b7d5e8"/>
+    <rect x="48" y="304" width="218" height="8" rx="4" fill="#b7d5e8"/>
+    <rect x="48" y="326" width="226" height="8" rx="4" fill="#b7d5e8"/>
+    <rect x="48" y="368" width="234" height="48" rx="7" fill="#d8edf9" stroke="#9ccae7"/>
+    <path d="M126 368v48M204 368v48M48 392h234" stroke="#9ccae7"/>
+
+    <g transform="translate(222 360)">
+      <circle cx="76" cy="76" r="52" fill="#1ea97c"/>
+      <path d="M51 77l17 17 34-38" fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <g transform="translate(735 500)" font-family="Segoe UI, Arial, sans-serif">
+    <rect width="432" height="72" rx="18" fill="#061b38" opacity="0.82" stroke="#7dd8ff" stroke-opacity="0.35"/>
+    <text x="28" y="31" fill="#9bdfff" font-size="15" font-weight="700" letter-spacing="1.5">EVIDENCE-DRIVEN WORKFLOW</text>
+    <text x="28" y="53" fill="#ffffff" font-size="18">Template → confirm → format → validate</text>
+  </g>
+</svg>
