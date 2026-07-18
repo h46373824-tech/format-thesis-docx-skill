@@ -458,6 +458,54 @@ def collect_fields(root: ET.Element) -> list[str]:
     return values
 
 
+def settings_record(root: Optional[ET.Element]) -> dict[str, bool]:
+    """Return settings that materially affect field refresh and pagination."""
+    if root is None:
+        return {
+            "update_fields_on_open": False,
+            "even_and_odd_headers": False,
+        }
+    return {
+        "update_fields_on_open": on_off(root.find("./w:updateFields", NS)) is True,
+        "even_and_odd_headers": on_off(
+            root.find("./w:evenAndOddHeaders", NS)
+        ) is True,
+    }
+
+
+def pagination_warnings(
+    settings: dict[str, bool], sections: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Flag section parity combinations that can create Word-only blank pages."""
+    if not settings["even_and_odd_headers"]:
+        return []
+
+    warnings: list[dict[str, Any]] = []
+    for section in sections[1:]:
+        raw_start = section["page_numbering"]["start"]
+        try:
+            start = int(raw_start) if raw_start is not None else None
+        except ValueError:
+            start = None
+        if (
+            start is not None
+            and start % 2 == 1
+            and section["type"] in {"nextPage", "oddPage"}
+        ):
+            warnings.append(
+                {
+                    "code": "possible_virtual_even_page",
+                    "section_index": section["index"],
+                    "message": (
+                        "Even/odd headers are enabled and this section restarts on an "
+                        "odd page number. Word may insert a virtual blank even page at "
+                        "the section boundary; verify the physical page count in Word."
+                    ),
+                }
+            )
+    return warnings
+
+
 def profile(path: Path) -> dict[str, Any]:
     if path.suffix.lower() not in {".docx", ".dotx", ".docm", ".dotm"}:
         raise ValueError("Input must be a DOCX, DOTX, DOCM, or DOTM file")
@@ -474,6 +522,7 @@ def profile(path: Path) -> dict[str, Any]:
             raise ValueError("Document body is missing")
 
         styles_root = read_xml(archive, "word/styles.xml")
+        settings = settings_record(read_xml(archive, "word/settings.xml"))
         styles = parse_styles(styles_root)
         style_heading_map = build_style_heading_map(styles_root)
         rels = parse_relationships(
@@ -492,6 +541,7 @@ def profile(path: Path) -> dict[str, Any]:
             for index, section in enumerate(document.findall(".//w:sectPr", NS))
         ]
         fields = collect_fields(document)
+        warnings = pagination_warnings(settings, sections)
         names = set(archive.namelist())
 
         return {
@@ -520,7 +570,9 @@ def profile(path: Path) -> dict[str, Any]:
                 "endnotes": int("word/endnotes.xml" in names),
             },
             "styles": styles,
+            "settings": settings,
             "sections": sections,
+            "warnings": warnings,
             "headers_footers": header_footer_profiles(archive, rels),
             "fields": fields,
             "has_toc_field": any(

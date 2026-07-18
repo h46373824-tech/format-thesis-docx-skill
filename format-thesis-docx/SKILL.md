@@ -133,6 +133,10 @@ Follow the `documents` render gate after every meaningful edit batch:
 
 Check cover alignment, blank pages, widows/orphans, heading placement, table and figure clipping, equation integrity, mixed fonts, section transitions, headers/footers, Roman-to-Arabic page-number changes, TOC pagination, and reference indentation.
 
+Treat odd/even pagination as a Word-specific risk. When `evenAndOddHeaders` is enabled and a later `nextPage` or `oddPage` section restarts at an odd number such as 1, Word may insert a virtual blank even page that is not obvious in a headless render. Review `docx_profile.py` warnings and verify the physical page count in desktop Word. If the authority does not require distinct odd/even headers or footers, disable the setting and remove `even` references; otherwise preserve it and confirm that the inserted parity page is intended.
+
+After Word saves a document, validate styles semantically rather than requiring literal English style IDs. Word may localize or shorten `styleId` values while retaining the style name, `outlineLvl`, numbering, and paragraph references. It may also omit the default `decimal` page-number format and remove `updateFields` after successfully refreshing a dynamic TOC. Accept those normalizations only when the section start value, TOC field, PAGEREF cache, page metadata, and rendered result remain consistent.
+
 If LibreOffice is unavailable, perform structural OOXML audits and disclose that visual QA could not be completed.
 
 ### 7. Deliver
@@ -154,4 +158,3 @@ If the user wants an actual button inside desktop or web Word, treat that as a s
 - interaction: return batched confirmation questions when required;
 - output: a new formatted DOCX plus a structured change summary;
 - rule: never modify the active document destructively without an explicit save-copy choice.
-
