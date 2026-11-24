@@ -35,6 +35,7 @@ Use these defaults only when no authority specifies otherwise:
 - Create a new file with `_formatted` appended to the name.
 - Use three TOC levels.
 - Use real Heading 1-3 styles and real multilevel numbering.
+- Treat outline level 9 as body text and `numId` 0 as numbering removed. Do not promote ordinary numbered sentences to headings from a leading `1.` alone.
 - Keep the cover unnumbered.
 - Keep preliminary pages separate from the Arabic-numbered body.
 - Mark fields to update on open.

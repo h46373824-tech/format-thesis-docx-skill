@@ -87,6 +87,8 @@ or:
 { "file_base64": "UEsDB...", "filename": "thesis_formatted.docx" }
 ```
 
+`download_url` must use HTTPS and the same host as the task pane's configured service origin. The client follows at most three redirects, and only when each `Location` stays on that same HTTPS host without userinfo. The response body must start with a ZIP local-file signature. The saved filename is reduced to a base name ending in `.docx`. A different host, an HTTP URL, or a non-ZIP body is rejected.
+
 If formatting discovers a new consequential ambiguity, return `questions` again. The task pane pauses and resubmits after the user answers.
 
 ## Skill adapter behavior

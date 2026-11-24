@@ -27,7 +27,10 @@ Maintainers aim to acknowledge a complete report within 7 days and provide an in
 
 - The Codex skill is designed to create a new output file instead of overwriting the manuscript.
 - The Word task pane exports the document locally only when the user explicitly starts preview, analysis, or formatting. Only analysis and formatting send that exported copy to the configured backend.
+- Result downloads must stay on the configured HTTPS origin. The client rejects other hosts, userinfo in the URL, and response bodies that are not ZIP packages, and it only follows same-origin redirects.
+- The DOCX profiler rejects DTD and entity declarations, refuses oversized packages, and turns an unreadable header or footer part into a warning instead of failing the whole profile.
 - This repository does **not** provide a hosted formatting backend. Backend authentication, authorization, storage, retention, CORS, TLS, logging, and deletion policies belong to each deployer.
+- The task pane runtime has no npm dependencies. Office manifest and debugging packages are development tools only. After the verified 7.0.1 / 3.0.1 upgrade, `npm audit` still reports high and moderate issues in `@azure/msal-node` and `glob` / `minimatch`, reached through the toolkit peer dependency. They are not loaded by `taskpane.js`, and this repository does not force-upgrade them.
 - Do not embed production secrets in task-pane JavaScript or commit them to this repository.
 - University templates and thesis files may contain confidential, personal, or copyrighted material; use synthetic or explicitly authorized test data.
 

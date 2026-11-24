@@ -12,7 +12,8 @@
 
 - [ ] Skill metadata and instructions remain valid / Skill 元数据和说明有效
 - [ ] `python -m compileall -q format-thesis-docx/scripts`
-- [ ] `npm ci` in `office-addin/`
+- [ ] `python -m unittest discover -s tests -v`
+- [ ] `npm ci --ignore-scripts` in `office-addin/`
 - [ ] `npm run check` in `office-addin/`
 - [ ] `npm run validate` in `office-addin/`
 - [ ] Documentation/API contract updated when behavior changed / 行为变化时已更新文档或接口契约
