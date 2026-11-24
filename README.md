@@ -120,18 +120,11 @@ The task pane can export the active document, collect templates and metadata, sh
 
 See the [Word Add-in guide](office-addin/README.md) for desktop Word, Word on the web and production deployment instructions.
 
-## Verified demonstration
+## What is tested in this repository
 
-The workflow has been tested with a synthetic 23-page Chinese thesis in desktop Microsoft Word. The verification covered:
+Automated tests build synthetic OOXML packages and check the profiler and the task-pane download policy. They cover theme fonts, style inheritance, Chinese style IDs, direct formatting, content controls, tables, formulas, character indents, outline levels, simple fields, numbering definitions, alternate-content branches, resource limits, and same-origin downloads.
 
-- 3 Word sections and A4 page geometry;
-- front-matter Roman numbering and body numbering restarted at 1;
-- 37 heading paragraphs across three levels;
-- a two-page dynamic TOC with 37 `PAGEREF` fields;
-- 3 tables, 12 reference entries and representative visual page inspection;
-- opening and saving in Word without a repair prompt.
-
-Read the reproducible scope and limitations in [Validation evidence](docs/validation.md). Synthetic demonstrations are for software QA only and must not be submitted as academic work.
+A desktop Word session on 2026-07-18 was used during early development. That 23-page file is not in the repository, the session was not re-run for the current revision, and these tests do not show that Word pagination or a finished thesis is correct. Read [Validation evidence](docs/validation.md). Synthetic packages are for software QA only and must not be submitted as academic work.
 
 ## Decision and safety model
 
@@ -183,8 +176,9 @@ Run the lightweight local checks:
 
 ```powershell
 python -m py_compile format-thesis-docx\scripts\docx_profile.py
+python -m unittest discover -s tests -v
 cd office-addin
-npm ci
+npm ci --ignore-scripts
 npm run check
 npm run validate
 ```

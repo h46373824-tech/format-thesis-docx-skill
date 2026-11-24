@@ -26,5 +26,5 @@
   <DefaultSettings>
     <SourceLocation DefaultValue="https://localhost:3010/taskpane.html"/>
   </DefaultSettings>
-  <Permissions>ReadWriteDocument</Permissions>
+  <Permissions>ReadDocument</Permissions>
 </OfficeApp>

@@ -1,5 +1,12 @@
 /* global Office, Word */
 
+import {
+  fetchSameOrigin,
+  filenameFromDisposition,
+  hasZipMagic,
+  safeDocxFilename,
+} from "./download-policy.js";
+
 const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 const SERVICE_CONFIG = Object.freeze({
   baseUrl: "https://localhost:8787",
@@ -140,7 +147,11 @@ async function formatDocument() {
         return;
       }
       if (result.file_base64) {
-        downloadBlob(base64ToBlob(result.file_base64, DOCX_MIME), result.filename || outputFilename());
+        const bytes = base64ToBytes(result.file_base64);
+        if (!hasZipMagic(bytes)) {
+          throw new Error("下载内容不是 DOCX 压缩包。");
+        }
+        downloadBlob(new Blob([bytes], { type: DOCX_MIME }), safeDocxFilename(result.filename, outputFilename()));
         setStatus("success", "处理完成", "新的 DOCX 已开始下载，原稿未被覆盖。");
         return;
       }
@@ -149,7 +160,7 @@ async function formatDocument() {
         if (!fileResponse.ok) {
           throw new Error(`下载结果失败：HTTP ${fileResponse.status}`);
         }
-        downloadBlob(await fileResponse.blob(), result.filename || outputFilename());
+        await downloadDocxBlob(await fileResponse.blob(), result.filename || outputFilename());
         setStatus("success", "处理完成", "新的 DOCX 已开始下载，原稿未被覆盖。");
         return;
       }
@@ -160,7 +171,10 @@ async function formatDocument() {
       throw new Error(`格式化服务返回 HTTP ${response.status}`);
     }
     const disposition = response.headers.get("content-disposition") || "";
-    downloadBlob(await response.blob(), filenameFromDisposition(disposition) || outputFilename());
+    await downloadDocxBlob(
+      await response.blob(),
+      filenameFromDisposition(disposition) || outputFilename(),
+    );
     setStatus("success", "处理完成", "新的 DOCX 已开始下载，原稿未被覆盖。");
   });
 }
@@ -342,11 +356,7 @@ function backendFetch(path, options) {
 }
 
 function backendFetchAbsolute(url, options) {
-  const target = new URL(url, backendBaseUrl());
-  if (target.protocol !== "https:") {
-    throw new Error("下载地址必须使用 HTTPS。");
-  }
-  return fetch(target, {
+  return fetchSameOrigin(url, backendBaseUrl(), fetch, {
     ...options,
     headers: { ...requestHeaders(), ...(options.headers || {}) },
   });
@@ -453,22 +463,21 @@ function collectConfirmations() {
   return answers;
 }
 
-function filenameFromDisposition(disposition) {
-  const utf8 = disposition.match(/filename\*=UTF-8''([^;]+)/i);
-  if (utf8) {
-    return decodeURIComponent(utf8[1].replace(/["']/g, ""));
-  }
-  const plain = disposition.match(/filename="?([^";]+)"?/i);
-  return plain?.[1] || null;
-}
-
-function base64ToBlob(value, mimeType) {
+function base64ToBytes(value) {
   const binary = atob(value);
   const bytes = new Uint8Array(binary.length);
   for (let index = 0; index < binary.length; index += 1) {
     bytes[index] = binary.charCodeAt(index);
   }
-  return new Blob([bytes], { type: mimeType });
+  return bytes;
+}
+
+async function downloadDocxBlob(blob, filename) {
+  const header = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
+  if (!hasZipMagic(header)) {
+    throw new Error("下载内容不是 DOCX 压缩包。");
+  }
+  downloadBlob(blob, safeDocxFilename(filename, outputFilename()));
 }
 
 function downloadBlob(blob, filename) {

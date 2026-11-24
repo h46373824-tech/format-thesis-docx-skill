@@ -23,8 +23,10 @@ The task pane is not the formatting engine. Deploy an HTTPS adapter that impleme
 
 ```powershell
 cd office-addin
-npm install
+npm ci --ignore-scripts
 ```
+
+`--ignore-scripts` is enough for `npm run check` and `npm run validate`. It does not install or trust a local development certificate. `npm start` is a separate sideload step and may install that certificate.
 
 ## Validate the manifest and JavaScript
 
@@ -57,6 +59,8 @@ Then configure a trusted network-share catalog or use your organization's Office
 ## Backend configuration
 
 The service address is intentionally hidden from the task-pane UI. Development builds use the `SERVICE_CONFIG.baseUrl` value near the top of `src/taskpane.js`, which defaults to `https://localhost:8787`.
+
+Downloads use that same HTTPS host only. Cross-origin `download_url` values, redirects to another host, and files that are not ZIP packages are rejected. The saved name is a base name ending in `.docx`.
 
 Do not embed production bearer tokens or other secrets in task-pane JavaScript. For production, place authentication and the real backend address behind a same-origin server-side proxy, then point `SERVICE_CONFIG.baseUrl` at that proxy origin.
 

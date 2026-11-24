@@ -7,7 +7,7 @@ description: Analyze and format academic thesis or dissertation Word files from 
 
 Create a new, formatted `.docx` from a manuscript and the user's formatting evidence. Preserve the manuscript's academic content unless the user separately requests writing or editing.
 
-Use the installed `documents` skill for DOCX editing, OOXML operations, rendering, and visual QA. Do not claim that this skill alone creates a Word ribbon add-in; it is the document-processing workflow that a future Office Add-in can call.
+Use the installed `documents` skill for DOCX editing, OOXML operations, rendering, and visual QA. This skill is the formatting workflow. The repository also contains a Word task pane that calls a separately deployed HTTPS adapter; this skill does not install or host that add-in.
 
 ## Required inputs
 
@@ -50,7 +50,7 @@ For each `.docx` or `.dotx`, run:
 python scripts/docx_profile.py input.docx --out profile.json
 ```
 
-If the current environment exposes Python under another launcher or managed runtime, use that runtime. The profiler uses only the Python standard library.
+If the current environment exposes Python under another launcher or managed runtime, use that runtime. The profiler uses only the Python standard library. It resolves theme fonts and `basedOn` inheritance, including Chinese style IDs, and reports direct formatting, content-control text, table paragraphs, and OMML text. Character indents (`firstLineChars`), document grid, and mirror margins are included. `outlineLvl` 9 means body text, not a heading. Simple-field instructions and numbering definitions are included. Cover candidates stop before the first real heading, page break, or section break. Unreadable header or footer parts are warnings. DTD entity declarations and oversized packages are rejected. The profile does not prove desktop Word pagination.
 
 For PDF or image instructions, extract only observable requirements. Do not infer hidden Word mechanics from appearance alone.
 

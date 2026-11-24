@@ -3,6 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveStaticPath } from "./static-path.mjs";
 
 const require = createRequire(import.meta.url);
 const devCerts = require("office-addin-dev-certs");
@@ -22,13 +23,7 @@ const mimeTypes = new Map([
 ]);
 
 function resolveRequestPath(rawUrl) {
-  const pathname = decodeURIComponent(new URL(rawUrl, `https://localhost:${port}`).pathname);
-  const requested = pathname === "/" ? "/taskpane.html" : pathname;
-  const resolved = path.resolve(rootDir, `.${requested}`);
-  if (resolved !== rootDir && !resolved.startsWith(`${rootDir}${path.sep}`)) {
-    return null;
-  }
-  return resolved;
+  return resolveStaticPath(rootDir, rawUrl, port);
 }
 
 const httpsOptions = await devCerts.getHttpsServerOptions();

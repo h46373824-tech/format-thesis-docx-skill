@@ -34,9 +34,10 @@ Run the local checks from the repository root:
 ```powershell
 python -m compileall -q format-thesis-docx/scripts
 python format-thesis-docx/scripts/docx_profile.py --help
+python -m unittest discover -s tests -v
 
 cd office-addin
-npm ci
+npm ci --ignore-scripts
 npm run check
 npm run validate
 ```

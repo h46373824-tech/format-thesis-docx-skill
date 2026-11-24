@@ -10,12 +10,12 @@
     "start": "office-addin-debugging start manifest.xml",
     "stop": "office-addin-debugging stop manifest.xml",
     "validate": "office-addin-manifest validate manifest.xml",
-    "check": "node --check src/taskpane.js && node --check scripts/serve.mjs"
+    "check": "node --check src/taskpane.js && node --check src/download-policy.js && node --check scripts/serve.mjs && node --check scripts/static-path.mjs && node scripts/test-client-policy.mjs"
   },
   "devDependencies": {
-    "office-addin-debugging": "6.1.2",
-    "office-addin-dev-certs": "2.0.10",
-    "office-addin-manifest": "2.1.6"
+    "office-addin-debugging": "7.0.1",
+    "office-addin-dev-certs": "3.0.1",
+    "office-addin-manifest": "3.0.1"
   },
   "engines": {
     "node": ">=20"

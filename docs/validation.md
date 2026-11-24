@@ -1,55 +1,49 @@
 # Validation evidence
 
-This page records demonstrated behavior without claiming universal university compliance.
+This page records what the repository can re-run. It does not claim that a finished thesis matches a university's rules, and it does not claim that desktop Word pagination was verified for the current revision.
 
-## Latest desktop Word verification
+## Automated checks
 
-- Date: 2026-07-18
-- Platform: Microsoft Word desktop for Windows
-- Document: synthetic Chinese master's-thesis demonstration
+GitHub Actions and the local commands in the README run:
 
-The demonstration contained fictional institutions, people, buildings and experiment values. It was created only to test document generation and formatting.
+- `python -m unittest discover -s tests -v`
+- `node scripts/test-client-policy.mjs` from `office-addin/`
+- skill metadata checks, Python compilation, and Office manifest validation
 
-| Check | Result |
-| --- | --- |
-| Word opened without a repair prompt | Passed |
-| Physical Word page count | 23 pages |
-| OOXML sections | 3 |
-| Page geometry | A4, 2.5 cm margins |
-| Front matter | Uppercase Roman numbering |
-| Main body | Decimal numbering restarted at 1 |
-| Heading hierarchy | 37 paragraphs: 13 level-1, 18 level-2, 6 level-3 |
-| Dynamic table of contents | Two Word pages, levels 1–3 |
-| TOC page references | 37 `PAGEREF` fields |
-| Data tables | 3 |
-| Reference entries | 12 |
-| External `altChunk` content | None |
+`tests/test_docx_profile.py` builds synthetic DOCX packages in a temporary directory. The packages are not opened in Microsoft Word. They check that the profiler:
 
-## Verification method
+- resolves theme fonts and `basedOn` inheritance, including a Chinese default style ID;
+- keeps Heading 1 character styles out of the heading map;
+- reads direct run formatting, content controls, table paragraphs, and OMML text;
+- reports `firstLineChars`, 1.5 line spacing, mirror margins, and document grid;
+- treats outline level 9 as body text and does not let a `Heading 10` name override outline level 8;
+- stops cover candidates before the first section break;
+- reads simple-field TOC and PAGE instructions and numbering definitions;
+- ignores `numId` 0;
+- keeps only one AlternateContent branch;
+- continues when a header part is not XML;
+- rejects DTD entity declarations and over-limit packages;
+- reports a VBA part inside a `.docx` separately from a macro-enabled extension.
 
-1. Generate the DOCX from a structured manuscript and an explicit format manifest.
-2. Inspect the ZIP/OOXML package for required parts, section properties, page size, margins, styles, numbering definitions, TOC fields, page fields, tables and references.
-3. Open the file in desktop Word and accept the field-update operation.
-4. Select the document, update the entire table of contents and save.
-5. Review the cover, TOC, section transitions, body hierarchy, all tables, references, appendix and final page in Word.
-6. Close Word and repeat the structural audit on the Word-saved file.
+The task-pane tests check that a download URL must be HTTPS on the configured service host, that cross-host and credentialed URLs are rejected, that redirects are followed only on that same host, and that saved names end in `.docx`.
 
-The final structural validator reported no failed checks. Word reported 23 pages, while the cached TOC correctly mapped front matter to Roman numerals and the body to Arabic page numbers.
+## Historical desktop Word note
+
+On 2026-07-18 a synthetic Chinese thesis was opened in desktop Word for Windows during early development. That file is not stored in this repository, and the session was not repeated for later commits. Notes from that session mentioned 23 physical pages, 3 sections, 37 headings, and 37 `PAGEREF` fields. Those numbers are not a current test result. Do not describe the current revision as pagination-verified or as producing a submission-ready thesis unless someone repeats the check in the target Word version and records it separately.
 
 ## What this evidence does not prove
 
-- It does not prove compatibility with every university template or every Word version.
-- It does not validate academic claims, citations, originality or research ethics.
-- It does not guarantee that a headless renderer and desktop Word will paginate identically.
-- It does not test every possible equation editor, citation manager, macro or embedded object.
-- It does not turn the synthetic demonstration into a submit-ready thesis.
+- Compatibility with every university template or Word version.
+- Academic claims, citations, originality, or research ethics.
+- That a headless renderer and desktop Word paginate the same way.
+- Equation editors, citation managers, macros, or embedded objects beyond the synthetic cases above.
+- That the Word task pane formats a document by itself. Formatting still requires the skill workflow and a separately deployed adapter.
 
 ## Recommended acceptance test for a new template
 
 - Retain the original manuscript and create a formatted copy.
-- Compare every required style against the official guide.
-- Inspect all pages at 100% when a renderer is available.
-- Open and save in the target Word version.
-- Update the entire TOC and all fields.
-- Verify cover metadata, section transitions, headers, footers and both page-number systems.
-- Check tables, figures, equations, citations, references and intentional blank pages.
+- Compare required styles with the official guide.
+- Inspect pages in the target Word version when a visual check is required.
+- Update the table of contents and fields in Word.
+- Verify cover metadata, section breaks, headers, footers, and both page-number systems.
+- Check tables, figures, equations, citations, references, and intentional blank pages.
